@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sonoran Pomodoro</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="desert-scene">
+            <div class="sun"></div>
+            <div class="cactus c1"></div>
+            <div class="cactus c2"></div>
+            <div class="ground"></div>
+        </div>
+        
+        <div class="ui-panel">
+            <h1 class="title">POMODORO</h1>
+            
+            <div class="timer-display" id="timer">25:00</div>
+            
+            <div class="controls">
+                <div class="select-wrapper">
+                    <label for="preset">SESSION TYPE</label>
+                    <select id="preset">
+                        <option value="25-5">25m Focus / 5m Break</option>
+                        <option value="50-10">50m Focus / 10m Break</option>
+                        <option value="90-15">90m Focus / 15m Break</option>
+                    </select>
+                </div>
+                
+                <div class="buttons">
+                    <button id="startBtn">START</button>
+                    <button id="resetBtn">RESET</button>
+                </div>
+            </div>
+
+            <div class="status-indicator" id="status">FOCUS</div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
