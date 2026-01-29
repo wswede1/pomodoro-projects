@@ -4,44 +4,756 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sonoran Pomodoro</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --sunset-orange: #E86A33;
+            --terracotta: #D35D3A;
+            --dusty-rose: #E8A87C;
+            --sage-green: #7D9D72;
+            --desert-sand: #F5E6D3;
+            --deep-purple: #4A3F6B;
+            --warm-cream: #FFF8F0;
+            --cactus-green: #5C7A5B;
+            --mountain-blue: #6B7B8C;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: linear-gradient(180deg, #FFB088 0%, #FF9B71 30%, #E86A33 60%, #D35D3A 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Desert Scene SVG Background */
+        .desert-scene {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 60%;
+            z-index: 0;
+        }
+
+        /* Main Container */
+        .container {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+            padding: 2rem;
+        }
+
+        /* Title */
+        .title {
+            font-size: 1.5rem;
+            font-weight: 300;
+            color: var(--warm-cream);
+            text-transform: uppercase;
+            letter-spacing: 0.5em;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        /* Timer Display */
+        .timer-container {
+            position: relative;
+            width: 320px;
+            height: 320px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .timer-ring {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .timer-ring svg {
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+        }
+
+        .timer-ring-bg {
+            fill: none;
+            stroke: rgba(255,255,255,0.2);
+            stroke-width: 8;
+        }
+
+        .timer-ring-progress {
+            fill: none;
+            stroke: var(--warm-cream);
+            stroke-width: 8;
+            stroke-linecap: round;
+            stroke-dasharray: 942;
+            stroke-dashoffset: 0;
+            transition: stroke-dashoffset 1s linear;
+            filter: drop-shadow(0 0 10px rgba(255,248,240,0.5));
+        }
+
+        .timer-display {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .timer-time {
+            font-size: 4.5rem;
+            font-weight: 600;
+            color: var(--warm-cream);
+            text-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            font-variant-numeric: tabular-nums;
+        }
+
+        .timer-label {
+            font-size: 0.9rem;
+            font-weight: 400;
+            color: var(--desert-sand);
+            text-transform: uppercase;
+            letter-spacing: 0.3em;
+        }
+
+        /* Controls */
+        .controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            color: var(--warm-cream);
+        }
+
+        .btn:hover {
+            transform: scale(1.1);
+            background: rgba(255,255,255,0.3);
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        .btn-primary {
+            width: 80px;
+            height: 80px;
+            background: var(--warm-cream);
+            color: var(--terracotta);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+        }
+
+        .btn-primary:hover {
+            background: white;
+        }
+
+        .btn svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .btn-primary svg {
+            width: 32px;
+            height: 32px;
+        }
+
+        /* Preset Selector */
+        .preset-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .preset-label {
+            font-size: 0.75rem;
+            color: var(--desert-sand);
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+        }
+
+        .preset-select {
+            appearance: none;
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 2rem;
+            padding: 0.75rem 2.5rem 0.75rem 1.5rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--warm-cream);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23FFF8F0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 18px;
+        }
+
+        .preset-select:hover {
+            background-color: rgba(255,255,255,0.25);
+            border-color: rgba(255,255,255,0.5);
+        }
+
+        .preset-select:focus {
+            outline: none;
+            border-color: var(--warm-cream);
+        }
+
+        .preset-select option {
+            background: var(--terracotta);
+            color: var(--warm-cream);
+        }
+
+        /* Session Counter */
+        .sessions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .session-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            transition: all 0.3s ease;
+        }
+
+        .session-dot.completed {
+            background: var(--warm-cream);
+            box-shadow: 0 0 10px rgba(255,248,240,0.5);
+        }
+
+        /* Floating Elements Animation */
+        .floating-element {
+            position: absolute;
+            opacity: 0.6;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        /* Claude-style geometric decorations */
+        .geo-shape {
+            position: absolute;
+            opacity: 0.15;
+        }
+
+        .geo-1 {
+            top: 10%;
+            left: 10%;
+            width: 80px;
+            height: 80px;
+            background: var(--warm-cream);
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+            animation: morph 8s ease-in-out infinite;
+        }
+
+        .geo-2 {
+            top: 15%;
+            right: 15%;
+            width: 60px;
+            height: 60px;
+            background: var(--warm-cream);
+            border-radius: 50%;
+            animation: morph 6s ease-in-out infinite reverse;
+        }
+
+        .geo-3 {
+            bottom: 40%;
+            left: 8%;
+            width: 40px;
+            height: 40px;
+            background: var(--warm-cream);
+            clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+            animation: float 7s ease-in-out infinite;
+        }
+
+        @keyframes morph {
+            0%, 100% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; }
+            25% { border-radius: 58% 42% 75% 25% / 76% 46% 54% 24%; }
+            50% { border-radius: 50% 50% 33% 67% / 55% 27% 73% 45%; }
+            75% { border-radius: 33% 67% 58% 42% / 63% 68% 32% 37%; }
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(-100px);
+            background: var(--warm-cream);
+            color: var(--terracotta);
+            padding: 1rem 2rem;
+            border-radius: 2rem;
+            font-weight: 500;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 100;
+        }
+
+        .notification.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Mode indicator */
+        .mode-indicator {
+            position: absolute;
+            top: -40px;
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            padding: 0.5rem 1.5rem;
+            border-radius: 2rem;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--warm-cream);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+        }
+
+        .mode-indicator.break {
+            background: var(--sage-green);
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .timer-container {
+                width: 260px;
+                height: 260px;
+            }
+            .timer-time {
+                font-size: 3.5rem;
+            }
+            .title {
+                font-size: 1.2rem;
+                letter-spacing: 0.3em;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <div class="desert-scene">
-            <div class="sun"></div>
-            <div class="cactus c1"></div>
-            <div class="cactus c2"></div>
-            <div class="ground"></div>
-        </div>
-        
-        <div class="ui-panel">
-            <h1 class="title">POMODORO</h1>
-            
-            <div class="timer-display" id="timer">25:00</div>
-            
-            <div class="controls">
-                <div class="select-wrapper">
-                    <label for="preset">SESSION TYPE</label>
-                    <select id="preset">
-                        <option value="25-5">25m Focus / 5m Break</option>
-                        <option value="50-10">50m Focus / 10m Break</option>
-                        <option value="90-15">90m Focus / 15m Break</option>
-                    </select>
-                </div>
-                
-                <div class="buttons">
-                    <button id="startBtn">START</button>
-                    <button id="resetBtn">RESET</button>
-                </div>
-            </div>
+    <!-- Geometric decorations -->
+    <div class="geo-shape geo-1"></div>
+    <div class="geo-shape geo-2"></div>
+    <div class="geo-shape geo-3"></div>
 
-            <div class="status-indicator" id="status">FOCUS</div>
+    <!-- Desert Scene SVG -->
+    <svg class="desert-scene" viewBox="0 0 1440 600" preserveAspectRatio="xMidYMax slice">
+        <defs>
+            <linearGradient id="mountainGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" style="stop-color:#6B7B8C;stop-opacity:0.8" />
+                <stop offset="100%" style="stop-color:#4A3F6B;stop-opacity:0.9" />
+            </linearGradient>
+            <linearGradient id="cactusGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#7D9D72;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#5C7A5B;stop-opacity:1" />
+            </linearGradient>
+            <linearGradient id="groundGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" style="stop-color:#D35D3A;stop-opacity:0.5" />
+                <stop offset="100%" style="stop-color:#8B4513;stop-opacity:0.7" />
+            </linearGradient>
+        </defs>
+        
+        <!-- Far mountains - Claude icon style geometric shapes -->
+        <path d="M0 450 L200 280 L350 350 L500 250 L650 320 L800 220 L950 300 L1100 200 L1250 280 L1440 180 L1440 600 L0 600 Z" fill="url(#mountainGrad)" opacity="0.4"/>
+        
+        <!-- Mid mountains -->
+        <path d="M0 500 L150 380 L300 420 L450 350 L600 400 L750 320 L900 380 L1050 300 L1200 360 L1350 280 L1440 350 L1440 600 L0 600 Z" fill="url(#mountainGrad)" opacity="0.6"/>
+        
+        <!-- Ground -->
+        <ellipse cx="720" cy="650" rx="900" ry="200" fill="url(#groundGrad)"/>
+        
+        <!-- Saguaro Cactus 1 - Large, Claude icon style with rounded geometric shapes -->
+        <g transform="translate(200, 350)">
+            <!-- Main trunk -->
+            <rect x="0" y="0" width="40" height="180" rx="20" fill="url(#cactusGrad)"/>
+            <!-- Left arm -->
+            <rect x="-50" y="40" width="30" height="80" rx="15" fill="url(#cactusGrad)"/>
+            <rect x="-50" y="30" width="80" height="30" rx="15" fill="url(#cactusGrad)"/>
+            <!-- Right arm -->
+            <rect x="35" y="70" width="30" height="60" rx="15" fill="url(#cactusGrad)"/>
+            <rect x="-5" y="60" width="70" height="30" rx="15" fill="url(#cactusGrad)"/>
+            <!-- Highlight -->
+            <rect x="12" y="10" width="8" height="160" rx="4" fill="rgba(255,255,255,0.2)"/>
+        </g>
+        
+        <!-- Saguaro Cactus 2 - Medium -->
+        <g transform="translate(1150, 380)">
+            <rect x="0" y="0" width="35" height="150" rx="17" fill="url(#cactusGrad)"/>
+            <rect x="-40" y="50" width="25" height="60" rx="12" fill="url(#cactusGrad)"/>
+            <rect x="-40" y="40" width="65" height="25" rx="12" fill="url(#cactusGrad)"/>
+            <rect x="10" y="15" width="6" height="125" rx="3" fill="rgba(255,255,255,0.2)"/>
+        </g>
+        
+        <!-- Saguaro Cactus 3 - Small -->
+        <g transform="translate(950, 420)">
+            <rect x="0" y="0" width="25" height="100" rx="12" fill="url(#cactusGrad)"/>
+            <rect x="20" y="30" width="20" height="40" rx="10" fill="url(#cactusGrad)"/>
+            <rect x="-5" y="25" width="50" height="20" rx="10" fill="url(#cactusGrad)"/>
+            <rect x="8" y="10" width="4" height="80" rx="2" fill="rgba(255,255,255,0.15)"/>
+        </g>
+
+        <!-- Small cactus 4 -->
+        <g transform="translate(400, 450)">
+            <rect x="0" y="0" width="20" height="70" rx="10" fill="url(#cactusGrad)"/>
+            <rect x="6" y="8" width="4" height="55" rx="2" fill="rgba(255,255,255,0.15)"/>
+        </g>
+
+        <!-- Barrel cactus - Claude icon style rounded shape -->
+        <g transform="translate(700, 480)">
+            <ellipse cx="25" cy="35" rx="30" ry="40" fill="url(#cactusGrad)"/>
+            <ellipse cx="20" cy="30" rx="5" ry="30" fill="rgba(255,255,255,0.15)"/>
+        </g>
+
+        <!-- Small rocks -->
+        <ellipse cx="300" cy="530" rx="40" ry="15" fill="#8B7355" opacity="0.6"/>
+        <ellipse cx="850" cy="520" rx="30" ry="12" fill="#8B7355" opacity="0.5"/>
+        <ellipse cx="1250" cy="540" rx="50" ry="18" fill="#8B7355" opacity="0.5"/>
+
+        <!-- Sun glow -->
+        <circle cx="1200" cy="120" r="60" fill="#FFD700" opacity="0.3"/>
+        <circle cx="1200" cy="120" r="40" fill="#FFF8F0" opacity="0.5"/>
+    </svg>
+
+    <!-- Notification -->
+    <div class="notification" id="notification">Time for a break! 🌵</div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <h1 class="title">Pomodoro</h1>
+
+        <!-- Preset Selector -->
+        <div class="preset-container">
+            <span class="preset-label">Session Length</span>
+            <select class="preset-select" id="presetSelect">
+                <option value="25-5">25 min / 5 min break</option>
+                <option value="50-10">50 min / 10 min break</option>
+                <option value="45-15">45 min / 15 min break</option>
+                <option value="30-5">30 min / 5 min break</option>
+                <option value="15-3">15 min / 3 min break</option>
+                <option value="90-20">90 min / 20 min break</option>
+            </select>
+        </div>
+
+        <!-- Timer -->
+        <div class="timer-container">
+            <div class="mode-indicator" id="modeIndicator">Focus</div>
+            <div class="timer-ring">
+                <svg viewBox="0 0 320 320">
+                    <circle class="timer-ring-bg" cx="160" cy="160" r="150"/>
+                    <circle class="timer-ring-progress" id="timerProgress" cx="160" cy="160" r="150"/>
+                </svg>
+            </div>
+            <div class="timer-display">
+                <span class="timer-time" id="timerDisplay">25:00</span>
+                <span class="timer-label" id="timerLabel">Focus Time</span>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls">
+            <button class="btn" id="resetBtn" title="Reset">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                    <path d="M3 3v5h5"/>
+                </svg>
+            </button>
+            <button class="btn btn-primary" id="playPauseBtn" title="Start/Pause">
+                <svg id="playIcon" viewBox="0 0 24 24" fill="currentColor">
+                    <polygon points="5 3 19 12 5 21 5 3"/>
+                </svg>
+                <svg id="pauseIcon" viewBox="0 0 24 24" fill="currentColor" style="display: none;">
+                    <rect x="6" y="4" width="4" height="16"/>
+                    <rect x="14" y="4" width="4" height="16"/>
+                </svg>
+            </button>
+            <button class="btn" id="skipBtn" title="Skip">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="5 4 15 12 5 20 5 4" fill="currentColor"/>
+                    <line x1="19" y1="5" x2="19" y2="19"/>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Session Counter -->
+        <div class="sessions" id="sessions">
+            <div class="session-dot"></div>
+            <div class="session-dot"></div>
+            <div class="session-dot"></div>
+            <div class="session-dot"></div>
         </div>
     </div>
-    <script src="script.js"></script>
+
+    <script>
+        // Pomodoro Timer Class
+        class PomodoroTimer {
+            constructor() {
+                this.presets = {
+                    '25-5': { work: 25, break: 5 },
+                    '50-10': { work: 50, break: 10 },
+                    '45-15': { work: 45, break: 15 },
+                    '30-5': { work: 30, break: 5 },
+                    '15-3': { work: 15, break: 3 },
+                    '90-20': { work: 90, break: 20 }
+                };
+
+                this.currentPreset = '25-5';
+                this.workDuration = this.presets[this.currentPreset].work * 60;
+                this.breakDuration = this.presets[this.currentPreset].break * 60;
+                
+                this.timeRemaining = this.workDuration;
+                this.totalTime = this.workDuration;
+                this.isRunning = false;
+                this.isBreak = false;
+                this.sessionsCompleted = 0;
+                this.interval = null;
+
+                this.circumference = 2 * Math.PI * 150; // radius = 150
+
+                this.initElements();
+                this.initEventListeners();
+                this.updateDisplay();
+                this.initAudio();
+            }
+
+            initElements() {
+                this.timerDisplay = document.getElementById('timerDisplay');
+                this.timerLabel = document.getElementById('timerLabel');
+                this.timerProgress = document.getElementById('timerProgress');
+                this.playPauseBtn = document.getElementById('playPauseBtn');
+                this.playIcon = document.getElementById('playIcon');
+                this.pauseIcon = document.getElementById('pauseIcon');
+                this.resetBtn = document.getElementById('resetBtn');
+                this.skipBtn = document.getElementById('skipBtn');
+                this.presetSelect = document.getElementById('presetSelect');
+                this.modeIndicator = document.getElementById('modeIndicator');
+                this.notification = document.getElementById('notification');
+                this.sessionDots = document.querySelectorAll('.session-dot');
+            }
+
+            initEventListeners() {
+                this.playPauseBtn.addEventListener('click', () => this.toggleTimer());
+                this.resetBtn.addEventListener('click', () => this.reset());
+                this.skipBtn.addEventListener('click', () => this.skip());
+                this.presetSelect.addEventListener('change', (e) => this.changePreset(e.target.value));
+                
+                // Keyboard shortcuts
+                document.addEventListener('keydown', (e) => {
+                    if (e.code === 'Space') {
+                        e.preventDefault();
+                        this.toggleTimer();
+                    } else if (e.code === 'KeyR') {
+                        this.reset();
+                    } else if (e.code === 'KeyS') {
+                        this.skip();
+                    }
+                });
+            }
+
+            initAudio() {
+                // Create audio context for notification sound
+                this.audioContext = null;
+            }
+
+            playNotificationSound() {
+                try {
+                    if (!this.audioContext) {
+                        this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    }
+                    
+                    const oscillator = this.audioContext.createOscillator();
+                    const gainNode = this.audioContext.createGain();
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(this.audioContext.destination);
+                    
+                    oscillator.frequency.setValueAtTime(587.33, this.audioContext.currentTime); // D5
+                    oscillator.type = 'sine';
+                    
+                    gainNode.gain.setValueAtTime(0.3, this.audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + 0.5);
+                    
+                    oscillator.start(this.audioContext.currentTime);
+                    oscillator.stop(this.audioContext.currentTime + 0.5);
+
+                    // Second tone
+                    setTimeout(() => {
+                        const osc2 = this.audioContext.createOscillator();
+                        const gain2 = this.audioContext.createGain();
+                        osc2.connect(gain2);
+                        gain2.connect(this.audioContext.destination);
+                        osc2.frequency.setValueAtTime(880, this.audioContext.currentTime); // A5
+                        osc2.type = 'sine';
+                        gain2.gain.setValueAtTime(0.3, this.audioContext.currentTime);
+                        gain2.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + 0.6);
+                        osc2.start(this.audioContext.currentTime);
+                        osc2.stop(this.audioContext.currentTime + 0.6);
+                    }, 200);
+                } catch (e) {
+                    console.log('Audio not supported');
+                }
+            }
+
+            changePreset(preset) {
+                this.currentPreset = preset;
+                this.workDuration = this.presets[preset].work * 60;
+                this.breakDuration = this.presets[preset].break * 60;
+                this.reset();
+            }
+
+            toggleTimer() {
+                if (this.isRunning) {
+                    this.pause();
+                } else {
+                    this.start();
+                }
+            }
+
+            start() {
+                this.isRunning = true;
+                this.playIcon.style.display = 'none';
+                this.pauseIcon.style.display = 'block';
+                
+                this.interval = setInterval(() => {
+                    this.timeRemaining--;
+                    this.updateDisplay();
+                    
+                    if (this.timeRemaining <= 0) {
+                        this.onTimerComplete();
+                    }
+                }, 1000);
+            }
+
+            pause() {
+                this.isRunning = false;
+                this.playIcon.style.display = 'block';
+                this.pauseIcon.style.display = 'none';
+                clearInterval(this.interval);
+            }
+
+            reset() {
+                this.pause();
+                this.isBreak = false;
+                this.timeRemaining = this.workDuration;
+                this.totalTime = this.workDuration;
+                this.updateDisplay();
+                this.updateModeIndicator();
+            }
+
+            skip() {
+                this.pause();
+                this.onTimerComplete();
+            }
+
+            onTimerComplete() {
+                this.playNotificationSound();
+                
+                if (this.isBreak) {
+                    // Break is over, start work
+                    this.isBreak = false;
+                    this.timeRemaining = this.workDuration;
+                    this.totalTime = this.workDuration;
+                    this.showNotification('Focus time! Let\'s go! 🌵');
+                } else {
+                    // Work is over, start break
+                    this.sessionsCompleted++;
+                    this.updateSessionDots();
+                    this.isBreak = true;
+                    this.timeRemaining = this.breakDuration;
+                    this.totalTime = this.breakDuration;
+                    this.showNotification('Time for a break! 🏜️');
+                }
+                
+                this.updateDisplay();
+                this.updateModeIndicator();
+                this.start();
+            }
+
+            updateDisplay() {
+                const minutes = Math.floor(this.timeRemaining / 60);
+                const seconds = this.timeRemaining % 60;
+                this.timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                // Update progress ring
+                const progress = this.timeRemaining / this.totalTime;
+                const offset = this.circumference * (1 - progress);
+                this.timerProgress.style.strokeDasharray = this.circumference;
+                this.timerProgress.style.strokeDashoffset = offset;
+                
+                // Update label
+                this.timerLabel.textContent = this.isBreak ? 'Break Time' : 'Focus Time';
+            }
+
+            updateModeIndicator() {
+                this.modeIndicator.textContent = this.isBreak ? 'Break' : 'Focus';
+                this.modeIndicator.classList.toggle('break', this.isBreak);
+            }
+
+            updateSessionDots() {
+                this.sessionDots.forEach((dot, index) => {
+                    dot.classList.toggle('completed', index < (this.sessionsCompleted % 4 || (this.sessionsCompleted > 0 && this.sessionsCompleted % 4 === 0 ? 4 : 0)));
+                });
+                
+                // Reset dots after 4 sessions
+                if (this.sessionsCompleted % 4 === 0 && this.sessionsCompleted > 0) {
+                    setTimeout(() => {
+                        this.sessionDots.forEach(dot => dot.classList.remove('completed'));
+                    }, 1000);
+                }
+            }
+
+            showNotification(message) {
+                this.notification.textContent = message;
+                this.notification.classList.add('show');
+                
+                setTimeout(() => {
+                    this.notification.classList.remove('show');
+                }, 3000);
+
+                // Browser notification if permitted
+                if (Notification.permission === 'granted') {
+                    new Notification('Sonoran Pomodoro', { body: message });
+                }
+            }
+        }
+
+        // Request notification permission
+        if ('Notification' in window && Notification.permission === 'default') {
+            Notification.requestPermission();
+        }
+
+        // Initialize timer
+        const timer = new PomodoroTimer();
+    </script>
 </body>
 </html>
