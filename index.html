@@ -42,7 +42,7 @@
             bottom: 0;
             left: 0;
             width: 100%;
-            height: 60%;
+            height: 70%;
             z-index: 0;
         }
 
@@ -263,47 +263,121 @@
             50% { transform: translateY(-20px) rotate(5deg); }
         }
 
-        /* Claude-style geometric decorations */
-        .geo-shape {
-            position: absolute;
-            opacity: 0.15;
+        /* Desert scene animations */
+        @keyframes cactusSway {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(0.4deg); }
         }
 
-        .geo-1 {
-            top: 10%;
-            left: 10%;
-            width: 80px;
-            height: 80px;
-            background: var(--warm-cream);
-            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
-            animation: morph 8s ease-in-out infinite;
+        @keyframes cactusSway2 {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(-0.35deg); }
         }
 
-        .geo-2 {
-            top: 15%;
-            right: 15%;
-            width: 60px;
-            height: 60px;
-            background: var(--warm-cream);
-            border-radius: 50%;
-            animation: morph 6s ease-in-out infinite reverse;
+        @keyframes ocotilloSway {
+            0%, 100% { transform: rotate(0deg); }
+            33% { transform: rotate(0.8deg); }
+            66% { transform: rotate(-0.6deg); }
         }
 
-        .geo-3 {
-            bottom: 40%;
-            left: 8%;
-            width: 40px;
-            height: 40px;
-            background: var(--warm-cream);
-            clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
-            animation: float 7s ease-in-out infinite;
+        @keyframes ocotilloSway2 {
+            0%, 100% { transform: rotate(0deg); }
+            40% { transform: rotate(-0.7deg); }
+            80% { transform: rotate(0.6deg); }
         }
 
-        @keyframes morph {
-            0%, 100% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; }
-            25% { border-radius: 58% 42% 75% 25% / 76% 46% 54% 24%; }
-            50% { border-radius: 50% 50% 33% 67% / 55% 27% 73% 45%; }
-            75% { border-radius: 33% 67% 58% 42% / 63% 68% 32% 37%; }
+        @keyframes roadrunnerWalk {
+            0%, 100% { transform: translateX(0) scaleX(1); }
+            49% { transform: translateX(80px) scaleX(1); }
+            50% { transform: translateX(80px) scaleX(-1); }
+            99% { transform: translateX(0) scaleX(-1); }
+        }
+
+        @keyframes legMove {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(25deg); }
+            50% { transform: rotate(0deg); }
+            75% { transform: rotate(-25deg); }
+        }
+
+        @keyframes javelinaWalk {
+            0%, 100% { transform: translateX(0) scaleX(1); }
+            49% { transform: translateX(-70px) scaleX(1); }
+            50% { transform: translateX(-70px) scaleX(-1); }
+            99% { transform: translateX(0) scaleX(-1); }
+        }
+
+        @keyframes headBob {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(3px) rotate(-5deg); }
+        }
+
+        @keyframes gilaWalk {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(30px); }
+        }
+
+        @keyframes gilaWiggle {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(3deg); }
+            75% { transform: rotate(-3deg); }
+        }
+
+        @keyframes tailWag {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(8deg); }
+        }
+
+        .cactus-sway {
+            transform-origin: bottom center;
+            animation: none;
+        }
+
+        .cactus-sway-2 {
+            transform-origin: bottom center;
+            animation: none;
+        }
+
+        .ocotillo-sway {
+            transform-origin: bottom center;
+            animation: none;
+        }
+
+        .ocotillo-sway-2 {
+            transform-origin: bottom center;
+            animation: none;
+        }
+
+        .roadrunner-walk {
+            animation: none;
+        }
+
+        .roadrunner-leg {
+            transform-origin: top center;
+            animation: none;
+        }
+
+        .javelina-walk {
+            animation: none;
+        }
+
+        .javelina-head {
+            transform-origin: right center;
+            animation: none;
+        }
+
+        .gila-walk {
+            animation: none;
+        }
+
+        .gila-body {
+            transform-origin: center center;
+            animation: none;
+        }
+
+        .tail-wag {
+            transform-origin: left center;
+            animation: none;
         }
 
         /* Notification */
@@ -362,87 +436,329 @@
     </style>
 </head>
 <body>
-    <!-- Geometric decorations -->
-    <div class="geo-shape geo-1"></div>
-    <div class="geo-shape geo-2"></div>
-    <div class="geo-shape geo-3"></div>
-
     <!-- Desert Scene SVG -->
-    <svg class="desert-scene" viewBox="0 0 1440 600" preserveAspectRatio="xMidYMax slice">
+    <svg class="desert-scene" viewBox="0 0 1440 600" preserveAspectRatio="xMidYMax meet">
         <defs>
             <linearGradient id="mountainGrad" x1="0%" y1="0%" x2="0%" y2="100%">
                 <stop offset="0%" style="stop-color:#6B7B8C;stop-opacity:0.8" />
                 <stop offset="100%" style="stop-color:#4A3F6B;stop-opacity:0.9" />
             </linearGradient>
             <linearGradient id="cactusGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" style="stop-color:#7D9D72;stop-opacity:1" />
-                <stop offset="100%" style="stop-color:#5C7A5B;stop-opacity:1" />
+                <stop offset="0%" style="stop-color:#78B86A;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#4E8A5A;stop-opacity:1" />
+            </linearGradient>
+            <linearGradient id="cactusGradDark" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#4E8A5A;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#3B6B46;stop-opacity:1" />
             </linearGradient>
             <linearGradient id="groundGrad" x1="0%" y1="0%" x2="0%" y2="100%">
                 <stop offset="0%" style="stop-color:#D35D3A;stop-opacity:0.5" />
                 <stop offset="100%" style="stop-color:#8B4513;stop-opacity:0.7" />
             </linearGradient>
+            <linearGradient id="ocotilloGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" style="stop-color:#6B8E5A;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#4A5D3A;stop-opacity:1" />
+            </linearGradient>
+            <linearGradient id="roadrunnerGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" style="stop-color:#5D4E37;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#3D3225;stop-opacity:1" />
+            </linearGradient>
+            <linearGradient id="javelinaGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" style="stop-color:#5A4A3A;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#3A3028;stop-opacity:1" />
+            </linearGradient>
+            <linearGradient id="gilaOrange" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" style="stop-color:#E8773A;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#D35D3A;stop-opacity:1" />
+            </linearGradient>
+
+            <!-- Reusable saguaro cactus -->
+            <g id="saguaro-base">
+                <!-- Main trunk -->
+                <path d="M26 240 Q22 200 24 160 Q26 120 30 80 Q34 40 28 8 Q46 -6 58 6 Q54 40 56 80 Q60 120 62 160 Q64 200 60 240 Z" fill="url(#cactusGrad)" stroke="url(#cactusGradDark)" stroke-width="1.2"/>
+                <!-- Left arm -->
+                <path d="M24 90 Q0 92 -18 84 Q-36 72 -42 50 Q-46 28 -38 8 Q-30 2 -22 8 Q-28 26 -26 44 Q-22 62 -6 70 Q10 78 24 76 Z" fill="url(#cactusGrad)" stroke="url(#cactusGradDark)" stroke-width="1"/>
+                <!-- Right arm -->
+                <path d="M60 125 Q82 128 98 118 Q116 104 120 74 Q124 44 112 22 Q102 16 94 26 Q104 48 102 70 Q98 92 80 102 Q68 108 60 106 Z" fill="url(#cactusGrad)" stroke="url(#cactusGradDark)" stroke-width="1"/>
+                <!-- Rib shadows -->
+                <path d="M32 230 Q30 170 32 110 Q34 70 32 16" stroke="url(#cactusGradDark)" stroke-width="2" fill="none" opacity="0.55"/>
+                <path d="M40 230 Q38 170 40 110 Q42 70 40 16" stroke="url(#cactusGradDark)" stroke-width="2" fill="none" opacity="0.55"/>
+                <path d="M48 230 Q46 170 48 110 Q50 70 48 16" stroke="url(#cactusGradDark)" stroke-width="2" fill="none" opacity="0.55"/>
+                <path d="M56 230 Q54 170 56 110 Q58 70 56 16" stroke="url(#cactusGradDark)" stroke-width="1.6" fill="none" opacity="0.45"/>
+                <!-- Highlights -->
+                <path d="M36 220 Q35 150 37 80 Q38 45 36 18" stroke="rgba(255,255,255,0.28)" stroke-width="4" fill="none" stroke-linecap="round"/>
+                <path d="M8 70 Q6 50 8 32" stroke="rgba(255,255,255,0.2)" stroke-width="2" fill="none" stroke-linecap="round"/>
+                <path d="M92 74 Q90 56 92 38" stroke="rgba(255,255,255,0.2)" stroke-width="2" fill="none" stroke-linecap="round"/>
+                <!-- Spines -->
+                <g stroke="rgba(255,255,255,0.35)" stroke-width="1" stroke-linecap="round">
+                    <line x1="22" y1="210" x2="18" y2="214"/>
+                    <line x1="28" y1="190" x2="24" y2="194"/>
+                    <line x1="36" y1="170" x2="32" y2="174"/>
+                    <line x1="44" y1="150" x2="40" y2="154"/>
+                    <line x1="52" y1="130" x2="48" y2="134"/>
+                    <line x1="60" y1="110" x2="56" y2="114"/>
+                    <line x1="8" y1="76" x2="4" y2="80"/>
+                    <line x1="96" y1="92" x2="100" y2="96"/>
+                </g>
+            </g>
         </defs>
         
-        <!-- Far mountains - Claude icon style geometric shapes -->
-        <path d="M0 450 L200 280 L350 350 L500 250 L650 320 L800 220 L950 300 L1100 200 L1250 280 L1440 180 L1440 600 L0 600 Z" fill="url(#mountainGrad)" opacity="0.4"/>
+        <!-- Subtle clouds -->
+        <g opacity="0.25">
+            <ellipse cx="260" cy="120" rx="60" ry="18" fill="#FFF8F0"/>
+            <ellipse cx="310" cy="115" rx="45" ry="14" fill="#FFF8F0"/>
+            <ellipse cx="360" cy="122" rx="55" ry="16" fill="#FFF8F0"/>
+        </g>
+        <g opacity="0.2">
+            <ellipse cx="900" cy="90" rx="70" ry="20" fill="#FFF8F0"/>
+            <ellipse cx="950" cy="85" rx="50" ry="16" fill="#FFF8F0"/>
+            <ellipse cx="1010" cy="92" rx="65" ry="18" fill="#FFF8F0"/>
+        </g>
+
+        <!-- Far mountains (taller, simplified) -->
+        <path d="M0 460 L200 220 L460 320 L720 190 L980 300 L1220 210 L1440 260 L1440 600 L0 600 Z" fill="url(#mountainGrad)" opacity="0.35"/>
         
-        <!-- Mid mountains -->
-        <path d="M0 500 L150 380 L300 420 L450 350 L600 400 L750 320 L900 380 L1050 300 L1200 360 L1350 280 L1440 350 L1440 600 L0 600 Z" fill="url(#mountainGrad)" opacity="0.6"/>
+        <!-- Mid mountains (taller, simplified) -->
+        <path d="M0 520 L180 300 L420 390 L680 270 L940 360 L1200 280 L1440 340 L1440 600 L0 600 Z" fill="url(#mountainGrad)" opacity="0.6"/>
         
         <!-- Ground -->
         <ellipse cx="720" cy="650" rx="900" ry="200" fill="url(#groundGrad)"/>
+
+        <!-- Foreground ridge -->
+        <path d="M0 560 Q180 535 360 545 Q540 560 720 548 Q900 535 1080 550 Q1260 565 1440 552 L1440 720 L0 720 Z" fill="#A4553C" opacity="0.6"/>
         
-        <!-- Saguaro Cactus 1 - Large, Claude icon style with rounded geometric shapes -->
-        <g transform="translate(200, 350)">
-            <!-- Main trunk -->
-            <rect x="0" y="0" width="40" height="180" rx="20" fill="url(#cactusGrad)"/>
-            <!-- Left arm -->
-            <rect x="-50" y="40" width="30" height="80" rx="15" fill="url(#cactusGrad)"/>
-            <rect x="-50" y="30" width="80" height="30" rx="15" fill="url(#cactusGrad)"/>
-            <!-- Right arm -->
-            <rect x="35" y="70" width="30" height="60" rx="15" fill="url(#cactusGrad)"/>
-            <rect x="-5" y="60" width="70" height="30" rx="15" fill="url(#cactusGrad)"/>
-            <!-- Highlight -->
-            <rect x="12" y="10" width="8" height="160" rx="4" fill="rgba(255,255,255,0.2)"/>
-        </g>
-        
-        <!-- Saguaro Cactus 2 - Medium -->
-        <g transform="translate(1150, 380)">
-            <rect x="0" y="0" width="35" height="150" rx="17" fill="url(#cactusGrad)"/>
-            <rect x="-40" y="50" width="25" height="60" rx="12" fill="url(#cactusGrad)"/>
-            <rect x="-40" y="40" width="65" height="25" rx="12" fill="url(#cactusGrad)"/>
-            <rect x="10" y="15" width="6" height="125" rx="3" fill="rgba(255,255,255,0.2)"/>
-        </g>
-        
-        <!-- Saguaro Cactus 3 - Small -->
-        <g transform="translate(950, 420)">
-            <rect x="0" y="0" width="25" height="100" rx="12" fill="url(#cactusGrad)"/>
-            <rect x="20" y="30" width="20" height="40" rx="10" fill="url(#cactusGrad)"/>
-            <rect x="-5" y="25" width="50" height="20" rx="10" fill="url(#cactusGrad)"/>
-            <rect x="8" y="10" width="4" height="80" rx="2" fill="rgba(255,255,255,0.15)"/>
-        </g>
-
-        <!-- Small cactus 4 -->
-        <g transform="translate(400, 450)">
-            <rect x="0" y="0" width="20" height="70" rx="10" fill="url(#cactusGrad)"/>
-            <rect x="6" y="8" width="4" height="55" rx="2" fill="rgba(255,255,255,0.15)"/>
-        </g>
-
-        <!-- Barrel cactus - Claude icon style rounded shape -->
-        <g transform="translate(700, 480)">
-            <ellipse cx="25" cy="35" rx="30" ry="40" fill="url(#cactusGrad)"/>
-            <ellipse cx="20" cy="30" rx="5" ry="30" fill="rgba(255,255,255,0.15)"/>
-        </g>
-
-        <!-- Small rocks -->
-        <ellipse cx="300" cy="530" rx="40" ry="15" fill="#8B7355" opacity="0.6"/>
-        <ellipse cx="850" cy="520" rx="30" ry="12" fill="#8B7355" opacity="0.5"/>
-        <ellipse cx="1250" cy="540" rx="50" ry="18" fill="#8B7355" opacity="0.5"/>
-
         <!-- Sun glow -->
         <circle cx="1200" cy="120" r="60" fill="#FFD700" opacity="0.3"/>
         <circle cx="1200" cy="120" r="40" fill="#FFF8F0" opacity="0.5"/>
+
+        <!-- ===== REALISTIC SAGUARO CACTUS 1 - Large ===== -->
+        <g transform="translate(60, 300) scale(1.25)" class="cactus-sway">
+            <use href="#saguaro-base"/>
+        </g>
+
+        <!-- ===== REALISTIC SAGUARO CACTUS 2 - Medium ===== -->
+        <g transform="translate(1240, 300) scale(1.25)" class="cactus-sway-2">
+            <use href="#saguaro-base"/>
+        </g>
+
+        <!-- ===== REALISTIC SAGUARO CACTUS 3 - Small ===== -->
+        <g transform="translate(980, 320) scale(1.15)" class="cactus-sway">
+            <use href="#saguaro-base"/>
+        </g>
+
+        <!-- ===== ADDITIONAL SAGUAROS ===== -->
+        <g transform="translate(360, 310) scale(1.2)" class="cactus-sway">
+            <use href="#saguaro-base"/>
+        </g>
+        <g transform="translate(680, 320) scale(1.2)" class="cactus-sway-2">
+            <use href="#saguaro-base"/>
+        </g>
+
+        <!-- ===== BARREL CACTUS ===== -->
+        <g transform="translate(180, 545)">
+            <ellipse cx="25" cy="42" rx="30" ry="40" fill="url(#cactusGrad)" stroke="url(#cactusGradDark)" stroke-width="1.2"/>
+            <!-- Ribs -->
+            <path d="M8 20 Q10 42 8 64" stroke="url(#cactusGradDark)" stroke-width="2" fill="none" opacity="0.45"/>
+            <path d="M18 12 Q20 42 18 72" stroke="url(#cactusGradDark)" stroke-width="2" fill="none" opacity="0.45"/>
+            <path d="M28 10 Q30 42 28 74" stroke="url(#cactusGradDark)" stroke-width="2" fill="none" opacity="0.45"/>
+            <path d="M38 12 Q40 42 38 72" stroke="url(#cactusGradDark)" stroke-width="2" fill="none" opacity="0.45"/>
+            <path d="M48 20 Q50 42 48 64" stroke="url(#cactusGradDark)" stroke-width="2" fill="none" opacity="0.45"/>
+            <!-- Highlight -->
+            <ellipse cx="18" cy="36" rx="4.5" ry="26" fill="rgba(255,255,255,0.18)"/>
+            <!-- Spines -->
+            <g fill="#E8A87C" opacity="0.7">
+                <circle cx="10" cy="18" r="1.3"/>
+                <circle cx="20" cy="12" r="1.3"/>
+                <circle cx="30" cy="10" r="1.3"/>
+                <circle cx="40" cy="12" r="1.3"/>
+                <circle cx="50" cy="18" r="1.3"/>
+                <circle cx="12" cy="32" r="1.1"/>
+                <circle cx="26" cy="28" r="1.1"/>
+                <circle cx="42" cy="32" r="1.1"/>
+            </g>
+            <ellipse cx="28" cy="16" rx="10" ry="5" fill="#F2C15E" opacity="0.7"/>
+            <circle cx="24" cy="14" r="2" fill="#EFAF3A"/>
+            <circle cx="32" cy="14" r="2" fill="#EFAF3A"/>
+            <ellipse cx="25" cy="76" rx="18" ry="6" fill="#3B4E36" opacity="0.25"/>
+        </g>
+
+        <!-- ===== ADDITIONAL BARREL CACTI ===== -->
+        <g transform="translate(520, 545)">
+            <ellipse cx="25" cy="42" rx="28" ry="38" fill="url(#cactusGrad)" stroke="url(#cactusGradDark)" stroke-width="1.2"/>
+            <path d="M8 20 Q10 42 8 64" stroke="url(#cactusGradDark)" stroke-width="2" fill="none" opacity="0.45"/>
+            <path d="M18 12 Q20 42 18 72" stroke="url(#cactusGradDark)" stroke-width="2" fill="none" opacity="0.45"/>
+            <path d="M28 10 Q30 42 28 74" stroke="url(#cactusGradDark)" stroke-width="2" fill="none" opacity="0.45"/>
+            <path d="M38 12 Q40 42 38 72" stroke="url(#cactusGradDark)" stroke-width="2" fill="none" opacity="0.45"/>
+            <path d="M48 20 Q50 42 48 64" stroke="url(#cactusGradDark)" stroke-width="2" fill="none" opacity="0.45"/>
+            <ellipse cx="18" cy="36" rx="4.5" ry="26" fill="rgba(255,255,255,0.18)"/>
+            <g fill="#E8A87C" opacity="0.7">
+                <circle cx="10" cy="18" r="1.2"/>
+                <circle cx="20" cy="12" r="1.2"/>
+                <circle cx="30" cy="10" r="1.2"/>
+                <circle cx="40" cy="12" r="1.2"/>
+                <circle cx="50" cy="18" r="1.2"/>
+                <circle cx="12" cy="32" r="1.0"/>
+                <circle cx="26" cy="28" r="1.0"/>
+                <circle cx="42" cy="32" r="1.0"/>
+            </g>
+            <ellipse cx="28" cy="16" rx="9" ry="4.5" fill="#F2C15E" opacity="0.7"/>
+            <circle cx="24" cy="14" r="1.8" fill="#EFAF3A"/>
+            <circle cx="32" cy="14" r="1.8" fill="#EFAF3A"/>
+            <ellipse cx="25" cy="76" rx="16" ry="5" fill="#3B4E36" opacity="0.25"/>
+        </g>
+        <g transform="translate(860, 545)">
+            <ellipse cx="25" cy="42" rx="26" ry="36" fill="url(#cactusGrad)" stroke="url(#cactusGradDark)" stroke-width="1.2"/>
+            <path d="M8 20 Q10 42 8 64" stroke="url(#cactusGradDark)" stroke-width="2" fill="none" opacity="0.45"/>
+            <path d="M18 12 Q20 42 18 72" stroke="url(#cactusGradDark)" stroke-width="2" fill="none" opacity="0.45"/>
+            <path d="M28 10 Q30 42 28 74" stroke="url(#cactusGradDark)" stroke-width="2" fill="none" opacity="0.45"/>
+            <path d="M38 12 Q40 42 38 72" stroke="url(#cactusGradDark)" stroke-width="2" fill="none" opacity="0.45"/>
+            <path d="M48 20 Q50 42 48 64" stroke="url(#cactusGradDark)" stroke-width="2" fill="none" opacity="0.45"/>
+            <ellipse cx="18" cy="36" rx="4.5" ry="26" fill="rgba(255,255,255,0.18)"/>
+            <g fill="#E8A87C" opacity="0.7">
+                <circle cx="10" cy="18" r="1.2"/>
+                <circle cx="20" cy="12" r="1.2"/>
+                <circle cx="30" cy="10" r="1.2"/>
+                <circle cx="40" cy="12" r="1.2"/>
+                <circle cx="50" cy="18" r="1.2"/>
+                <circle cx="12" cy="32" r="1.0"/>
+                <circle cx="26" cy="28" r="1.0"/>
+                <circle cx="42" cy="32" r="1.0"/>
+            </g>
+            <ellipse cx="28" cy="16" rx="9" ry="4.5" fill="#F2C15E" opacity="0.7"/>
+            <circle cx="24" cy="14" r="1.8" fill="#EFAF3A"/>
+            <circle cx="32" cy="14" r="1.8" fill="#EFAF3A"/>
+            <ellipse cx="25" cy="76" rx="16" ry="5" fill="#3B4E36" opacity="0.25"/>
+        </g>
+        <g transform="translate(1120, 545) scale(0.9)">
+            <ellipse cx="25" cy="42" rx="24" ry="34" fill="url(#cactusGrad)" stroke="url(#cactusGradDark)" stroke-width="1.2"/>
+            <path d="M8 20 Q10 42 8 64" stroke="url(#cactusGradDark)" stroke-width="2" fill="none" opacity="0.45"/>
+            <path d="M18 12 Q20 42 18 72" stroke="url(#cactusGradDark)" stroke-width="2" fill="none" opacity="0.45"/>
+            <path d="M28 10 Q30 42 28 74" stroke="url(#cactusGradDark)" stroke-width="2" fill="none" opacity="0.45"/>
+            <path d="M38 12 Q40 42 38 72" stroke="url(#cactusGradDark)" stroke-width="2" fill="none" opacity="0.45"/>
+            <path d="M48 20 Q50 42 48 64" stroke="url(#cactusGradDark)" stroke-width="2" fill="none" opacity="0.45"/>
+            <ellipse cx="18" cy="36" rx="4.5" ry="26" fill="rgba(255,255,255,0.18)"/>
+            <g fill="#E8A87C" opacity="0.7">
+                <circle cx="10" cy="18" r="1.2"/>
+                <circle cx="20" cy="12" r="1.2"/>
+                <circle cx="30" cy="10" r="1.2"/>
+                <circle cx="40" cy="12" r="1.2"/>
+                <circle cx="50" cy="18" r="1.2"/>
+                <circle cx="12" cy="32" r="1.0"/>
+                <circle cx="26" cy="28" r="1.0"/>
+                <circle cx="42" cy="32" r="1.0"/>
+            </g>
+            <ellipse cx="28" cy="16" rx="8.5" ry="4.2" fill="#F2C15E" opacity="0.7"/>
+            <circle cx="24" cy="14" r="1.6" fill="#EFAF3A"/>
+            <circle cx="32" cy="14" r="1.6" fill="#EFAF3A"/>
+            <ellipse cx="25" cy="76" rx="15" ry="4.5" fill="#3B4E36" opacity="0.25"/>
+        </g>
+
+        <!-- ===== PRICKLY PEAR ===== -->
+        <g transform="translate(420, 545)">
+            <ellipse cx="0" cy="48" rx="26" ry="32" fill="url(#cactusGrad)" stroke="url(#cactusGradDark)" stroke-width="1.2"/>
+            <ellipse cx="-24" cy="30" rx="20" ry="24" fill="url(#cactusGrad)" stroke="url(#cactusGradDark)" stroke-width="1.2"/>
+            <ellipse cx="22" cy="24" rx="19" ry="23" fill="url(#cactusGrad)" stroke="url(#cactusGradDark)" stroke-width="1.2"/>
+            <ellipse cx="-4" cy="6" rx="16" ry="20" fill="url(#cactusGrad)" stroke="url(#cactusGradDark)" stroke-width="1.2"/>
+            <ellipse cx="8" cy="-10" rx="12" ry="16" fill="url(#cactusGrad)" stroke="url(#cactusGradDark)" stroke-width="1.2"/>
+            <!-- Glochids -->
+            <g fill="#E8A87C" opacity="0.6">
+                <circle cx="-12" cy="48" r="1.3"/>
+                <circle cx="10" cy="50" r="1.3"/>
+                <circle cx="-30" cy="30" r="1.3"/>
+                <circle cx="-12" cy="28" r="1.3"/>
+                <circle cx="30" cy="26" r="1.3"/>
+                <circle cx="12" cy="20" r="1.3"/>
+                <circle cx="-8" cy="6" r="1.3"/>
+                <circle cx="8" cy="6" r="1.3"/>
+                <circle cx="10" cy="-8" r="1.1"/>
+            </g>
+            <!-- Fruit -->
+            <circle cx="-30" cy="10" r="3" fill="#E83A3A"/>
+            <circle cx="26" cy="4" r="3" fill="#E83A3A"/>
+            <circle cx="6" cy="-16" r="3" fill="#E83A3A"/>
+            <ellipse cx="-2" cy="78" rx="18" ry="5" fill="#3B4E36" opacity="0.22"/>
+        </g>
+        <g transform="translate(760, 545) scale(0.9)">
+            <ellipse cx="0" cy="48" rx="24" ry="30" fill="url(#cactusGrad)" stroke="url(#cactusGradDark)" stroke-width="1.2"/>
+            <ellipse cx="-22" cy="32" rx="18" ry="22" fill="url(#cactusGrad)" stroke="url(#cactusGradDark)" stroke-width="1.2"/>
+            <ellipse cx="20" cy="24" rx="17" ry="21" fill="url(#cactusGrad)" stroke="url(#cactusGradDark)" stroke-width="1.2"/>
+            <ellipse cx="-4" cy="8" rx="14" ry="18" fill="url(#cactusGrad)" stroke="url(#cactusGradDark)" stroke-width="1.2"/>
+            <ellipse cx="8" cy="-10" rx="10" ry="14" fill="url(#cactusGrad)" stroke="url(#cactusGradDark)" stroke-width="1.2"/>
+            <g fill="#E8A87C" opacity="0.6">
+                <circle cx="-10" cy="48" r="1.2"/>
+                <circle cx="10" cy="50" r="1.2"/>
+                <circle cx="-24" cy="32" r="1.2"/>
+                <circle cx="22" cy="24" r="1.2"/>
+                <circle cx="6" cy="10" r="1.2"/>
+                <circle cx="-6" cy="10" r="1.2"/>
+                <circle cx="8" cy="-8" r="1.0"/>
+            </g>
+            <circle cx="-24" cy="10" r="2.6" fill="#E83A3A"/>
+            <circle cx="22" cy="6" r="2.6" fill="#E83A3A"/>
+            <circle cx="6" cy="-16" r="2.6" fill="#E83A3A"/>
+            <ellipse cx="-2" cy="78" rx="16" ry="4.5" fill="#3B4E36" opacity="0.22"/>
+        </g>
+
+        <!-- ===== OCOTILLO 1 ===== -->
+        <g transform="translate(260, 430)">
+            <!-- Stems fanning out -->
+            <g class="ocotillo-sway">
+                <path d="M0 80 Q-25 40 -40 -20 Q-42 -35 -38 -45" stroke="url(#ocotilloGrad)" stroke-width="4" fill="none" stroke-linecap="round"/>
+                <circle cx="-38" cy="-50" r="6" fill="#E83A3A"/>
+                <circle cx="-42" cy="-48" r="4" fill="#D32F2F"/>
+            </g>
+            <g class="ocotillo-sway-2">
+                <path d="M0 80 Q-10 35 -15 -30 Q-16 -50 -12 -65" stroke="url(#ocotilloGrad)" stroke-width="4" fill="none" stroke-linecap="round"/>
+                <circle cx="-12" cy="-70" r="6" fill="#E83A3A"/>
+                <circle cx="-16" cy="-68" r="4" fill="#D32F2F"/>
+            </g>
+            <g class="ocotillo-sway">
+                <path d="M0 80 Q5 30 8 -40 Q10 -60 12 -75" stroke="url(#ocotilloGrad)" stroke-width="4" fill="none" stroke-linecap="round"/>
+                <circle cx="12" cy="-80" r="6" fill="#E83A3A"/>
+                <circle cx="8" cy="-78" r="4" fill="#D32F2F"/>
+            </g>
+            <g class="ocotillo-sway-2">
+                <path d="M0 80 Q20 45 35 -15 Q40 -35 42 -50" stroke="url(#ocotilloGrad)" stroke-width="4" fill="none" stroke-linecap="round"/>
+                <circle cx="42" cy="-55" r="6" fill="#E83A3A"/>
+                <circle cx="38" cy="-53" r="4" fill="#D32F2F"/>
+            </g>
+            <g class="ocotillo-sway">
+                <path d="M0 80 Q30 55 50 5 Q58 -15 62 -30" stroke="url(#ocotilloGrad)" stroke-width="4" fill="none" stroke-linecap="round"/>
+                <circle cx="62" cy="-35" r="5" fill="#E83A3A"/>
+                <circle cx="58" cy="-33" r="3" fill="#D32F2F"/>
+            </g>
+        </g>
+
+        <!-- ===== OCOTILLO 2 ===== -->
+        <g transform="translate(1000, 445)">
+            <g class="ocotillo-sway-2">
+                <path d="M0 60 Q-18 30 -28 -20 Q-30 -35 -26 -45" stroke="url(#ocotilloGrad)" stroke-width="3" fill="none" stroke-linecap="round"/>
+                <circle cx="-26" cy="-50" r="5" fill="#E83A3A"/>
+            </g>
+            <g class="ocotillo-sway">
+                <path d="M0 60 Q-5 25 -5 -25 Q-5 -45 -2 -55" stroke="url(#ocotilloGrad)" stroke-width="3" fill="none" stroke-linecap="round"/>
+                <circle cx="-2" cy="-60" r="5" fill="#E83A3A"/>
+            </g>
+            <g class="ocotillo-sway-2">
+                <path d="M0 60 Q12 35 22 -10 Q28 -30 32 -42" stroke="url(#ocotilloGrad)" stroke-width="3" fill="none" stroke-linecap="round"/>
+                <circle cx="32" cy="-47" r="5" fill="#E83A3A"/>
+            </g>
+        </g>
+
+        <!-- Small rocks -->
+        <ellipse cx="140" cy="575" rx="34" ry="13" fill="#8B7355" opacity="0.6"/>
+        <ellipse cx="340" cy="582" rx="28" ry="11" fill="#8B7355" opacity="0.5"/>
+        <ellipse cx="560" cy="578" rx="42" ry="16" fill="#8B7355" opacity="0.55"/>
+        <ellipse cx="780" cy="586" rx="26" ry="10" fill="#8B7355" opacity="0.45"/>
+        <ellipse cx="980" cy="575" rx="32" ry="12" fill="#8B7355" opacity="0.5"/>
+        <ellipse cx="1180" cy="582" rx="38" ry="14" fill="#8B7355" opacity="0.5"/>
+        <ellipse cx="1360" cy="575" rx="48" ry="18" fill="#8B7355" opacity="0.5"/>
+
+
+        <!-- ===== SMALL YOUNG SAGUARO ===== -->
+        <g transform="translate(1120, 320) scale(1.15)" class="cactus-sway-2">
+            <use href="#saguaro-base"/>
+        </g>
     </svg>
 
     <!-- Notification -->
@@ -576,6 +892,12 @@
                         this.reset();
                     } else if (e.code === 'KeyS') {
                         this.skip();
+                    } else if (e.code === 'ArrowRight') {
+                        e.preventDefault();
+                        this.skipTime(-10); // Skip forward (decrease time remaining)
+                    } else if (e.code === 'ArrowLeft') {
+                        e.preventDefault();
+                        this.skipTime(10); // Skip backward (increase time remaining)
                     }
                 });
             }
@@ -673,6 +995,12 @@
             skip() {
                 this.pause();
                 this.onTimerComplete();
+            }
+
+            skipTime(seconds) {
+                // Positive seconds = add time (skip backward), negative = subtract time (skip forward)
+                this.timeRemaining = Math.max(0, Math.min(this.totalTime, this.timeRemaining + seconds));
+                this.updateDisplay();
             }
 
             onTimerComplete() {
