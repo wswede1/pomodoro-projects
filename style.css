@@ -1,0 +1,270 @@
+:root {
+    --bg-color: #2D2A2E; /* Dark charcoal */
+    --sand: #E6B89C;
+    --terracotta: #D35D47; /* Claude icon reddish/orange */
+    --sage: #7D9C8B; 
+    --sky-gradient-start: #2A2356; /* Deep desert night/twilight */
+    --sky-gradient-end: #D35D47; /* Sunset */
+    --text-color: #F0F0F0;
+    --ui-bg: rgba(20, 20, 20, 0.85);
+    --border: #E6B89C;
+    --accent: #E57C65; /* Claude icon orange */
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: linear-gradient(180deg, var(--sky-gradient-start) 0%, var(--sky-gradient-end) 100%);
+    color: var(--text-color);
+    font-family: 'JetBrains Mono', monospace; /* Code aesthetic */
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+/* Grain Overlay */
+body::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+    opacity: 0.08;
+    z-index: 100;
+}
+
+.container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Background Art - Abstract Geometric Sonoran */
+.desert-scene {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+}
+
+.sun {
+    position: absolute;
+    top: 15%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    height: 200px;
+    background: var(--terracotta);
+    border-radius: 50%;
+    box-shadow: 0 0 40px var(--terracotta);
+}
+
+/* Pixelated look for the sun/icon feel */
+.sun::after {
+    content: '';
+    position: absolute;
+    top: 20%;
+    left: 20%;
+    width: 60%;
+    height: 10%;
+    background: rgba(0,0,0,0.1);
+}
+
+/* Scanline effect */
+.ui-panel::after {
+    content: " ";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%);
+    background-size: 100% 4px;
+    z-index: 2;
+    pointer-events: none;
+    border-radius: 12px;
+}
+
+.ground {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 25%;
+    background: var(--sand);
+    clip-path: polygon(0 20%, 20% 10%, 40% 25%, 60% 15%, 80% 30%, 100% 20%, 100% 100%, 0 100%);
+}
+
+.cactus {
+    position: absolute;
+    bottom: 20%;
+    background: var(--sage);
+    width: 40px;
+    height: 120px;
+    border-radius: 20px 20px 0 0;
+    box-shadow: 4px 4px 0 rgba(0,0,0,0.2);
+}
+
+.cactus::before, .cactus::after {
+    content: '';
+    position: absolute;
+    background: var(--sage);
+    border-radius: 10px;
+}
+
+.c1 {
+    left: 20%;
+    height: 150px;
+}
+.c1::before {
+    width: 20px;
+    height: 40px;
+    top: 40px;
+    left: -20px;
+    border-radius: 0 0 0 10px;
+    box-shadow: 2px 2px 0 rgba(0,0,0,0.2);
+}
+.c1::after {
+    width: 20px;
+    height: 60px;
+    top: 30px;
+    right: -20px;
+    border-radius: 0 0 10px 0;
+    box-shadow: 2px 2px 0 rgba(0,0,0,0.2);
+}
+
+.c2 {
+    right: 25%;
+    height: 100px;
+    width: 30px;
+}
+
+/* UI Panel - Glassmorphism / Code Editor feel */
+.ui-panel {
+    background: var(--ui-bg);
+    padding: 2.5rem;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.1);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    text-align: center;
+    width: 350px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.title {
+    font-size: 1.2rem;
+    letter-spacing: 4px;
+    color: var(--sand);
+    margin-bottom: 0.5rem;
+}
+
+.timer-display {
+    font-size: 4rem;
+    font-weight: 700;
+    color: var(--terracotta);
+    text-shadow: 2px 2px 0px rgba(0,0,0,0.5);
+    font-variant-numeric: tabular-nums;
+}
+
+.controls {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.select-wrapper {
+    text-align: left;
+}
+
+.select-wrapper label {
+    display: block;
+    font-size: 0.7rem;
+    margin-bottom: 0.5rem;
+    color: #888;
+    letter-spacing: 1px;
+}
+
+select {
+    width: 100%;
+    padding: 0.8rem;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: var(--text-color);
+    font-family: inherit;
+    border-radius: 4px;
+    appearance: none;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+select:hover {
+    border-color: var(--terracotta);
+}
+
+.buttons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+
+button {
+    flex: 1;
+    padding: 1rem;
+    border: none;
+    border-radius: 4px;
+    font-family: inherit;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.1s, box-shadow 0.1s;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+#startBtn {
+    background: var(--terracotta);
+    color: white;
+    box-shadow: 0 4px 0 #A03D2A;
+}
+
+#startBtn:active {
+    transform: translateY(4px);
+    box-shadow: 0 0 0 #A03D2A;
+}
+
+#resetBtn {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.3);
+    color: rgba(255,255,255,0.7);
+}
+
+#resetBtn:hover {
+    background: rgba(255,255,255,0.05);
+    color: white;
+}
+
+.status-indicator {
+    font-size: 0.8rem;
+    color: var(--sage);
+    letter-spacing: 2px;
+    margin-top: 0.5rem;
+    text-transform: uppercase;
+}
