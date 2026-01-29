@@ -1,0 +1,19 @@
+{
+  "name": "Sonoran Pomodoro",
+  "short_name": "Pomodoro",
+  "description": "Customizable Pomodoro clock with a chill Sonoran-desert-inspired design.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#070814",
+  "theme_color": "#070814",
+  "icons": [
+    {
+      "src": "/sonoran.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
+

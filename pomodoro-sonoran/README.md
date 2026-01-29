@@ -17,6 +17,12 @@ npm install
 npm run dev
 ```
 
+## Install on iPhone (Add to Home Screen)
+
+- Deploy it somewhere **over HTTPS** (required for full PWA/offline support).
+- Open the deployed site in **Safari** on iPhone.
+- Tap **Share** → **Add to Home Screen**.
+
 ## Build
 
 ```bash
